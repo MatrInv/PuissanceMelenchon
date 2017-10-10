@@ -1,26 +1,26 @@
+package plateau;
 import javax.swing.JFrame;
 
-import plateau.PlateauJeu;
+import modele.Modele;
 
-public class Plateau extends JFrame{
+public class Puissance4 extends JFrame{
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public Plateau() {		
+	public Puissance4() {		
 		super("Puissance 4");
 		this.setSize(500,400);
-		int[][] jeu = { {0,1,2,2},{1,2,0,2}, {1,2,0,2}, {1,2,0,2} };
-		PlateauJeu plateau = new PlateauJeu(jeu);
+		Modele m = new Modele();
+		PlateauJeu plateau = new PlateauJeu(m);
 		this.add(plateau);
 		this.setVisible(true);
-		
 	}
 	
 	public static void main(String[] args) {
-		new Plateau();
+		new Puissance4();
 	}
 
 }

@@ -13,6 +13,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
+import modele.Modele;
+
 public class PlateauJeu extends JPanel implements Observer {
 
 	/**
@@ -22,10 +24,14 @@ public class PlateauJeu extends JPanel implements Observer {
 
 	private ImageIcon[] images;
 	private JButton[][] plateau;
+	private Modele m;
 
-	public PlateauJeu(int[][] tab) {
-		//ajouter ds liste modele
+	public PlateauJeu(Modele m) {
 		super();
+
+		m.addObserver(this);
+		this.m = m;
+
 		this.setBackground(Color.WHITE);
 		this.setLayout(new GridBagLayout());
 		GridBagConstraints g = new GridBagConstraints();
@@ -33,18 +39,18 @@ public class PlateauJeu extends JPanel implements Observer {
 		g.gridy = 0;
 
 		images = new ImageIcon[3];
-		images[0] = new ImageIcon(getClass().getResource("/jetons/blanc.png"));
-		images[1] = new ImageIcon(getClass().getResource("/jetons/rouge.png"));
-		images[2] = new ImageIcon(getClass().getResource("/jetons/vert.png"));
-		plateau = new JButton[tab.length][tab[0].length];
-		remplirPlateau(tab, g);
+		images[0] = new ImageIcon(getClass().getResource("/ressources/blanc.png"));
+		images[1] = new ImageIcon(getClass().getResource("/ressources/rouge.png"));
+		images[2] = new ImageIcon(getClass().getResource("/ressources/vert.png"));
+		plateau = new JButton[m.getLargeur()][m.getHauteur()];
+		remplirPlateau(g);
 	}
 
-	public void remplirPlateau(int[][] tab, GridBagConstraints g) {
-		for (int lig = 0; lig < tab[0].length; lig++) {
-			g.gridx = lig;
-			for (int col = 0; col < tab.length; col++) {
-				g.gridy = col;
+	public void remplirPlateau(GridBagConstraints g) {
+		for (int lig = 0; lig < m.getHauteur(); lig++) {
+			g.gridy = lig;
+			for (int col = 0; col < m.getLargeur(); col++) {
+				g.gridx = col;
 				JButton c = new JButton(images[0]);
 				c.setBackground(Color.WHITE);
 				c.setPreferredSize(new Dimension(60, 60));
@@ -54,11 +60,10 @@ public class PlateauJeu extends JPanel implements Observer {
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						// prevenir modele
-						for (int col = 0; col < tab[0].length; col++) {
-							for (int lig = 0; lig < tab.length; lig++) {
-								if (e.getSource() == plateau[lig][col]) {
-									// prevenir modele + maj
-									poserJeton(col, 1);
+						for (int lig = 0; lig < m.getHauteur(); lig++) {
+							for (int col = 0; col < m.getLargeur(); col++) {
+								if (e.getSource() == plateau[col][lig]) {
+									m.jouerJeton(col);
 								}
 							}
 						}
@@ -71,17 +76,12 @@ public class PlateauJeu extends JPanel implements Observer {
 		}
 	}
 
-	public void poserJeton(int col, int image) {
-		int lig = plateau.length - 1;
-		System.out.println("lig" + lig + "col" + col);
-		while (plateau[lig][col].getIcon() != images[0] & lig > 0) {
-			lig--;
-		}
-		plateau[lig][col].setIcon(images[image]);
-	}
-
 	@Override
 	public void update(Observable arg0, Object arg1) {
-		// a faire quand modele existera...
+		for (int y = 0; y < m.getHauteur(); y++) {
+			for (int x = 0; x < m.getLargeur(); x++) {
+				plateau[x][y].setIcon(images[m.getCase(x, y)]);
+			}
+		}
 	}
 }

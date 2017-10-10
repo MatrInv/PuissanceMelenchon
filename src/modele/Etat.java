@@ -13,6 +13,7 @@ public class Etat {
 	
 	public Etat(int t){
 		taille=t;
-		plateau=new int[][]();
+		//plateau=new int[][]();
 	}
+ 
 }
