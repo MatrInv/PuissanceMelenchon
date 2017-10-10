@@ -8,7 +8,7 @@ public class Modele extends Observable {
 	private int largeur = 7;
 	private MCTS mcts;
 	private int joueurActu;
-	//rajouter etat a la place de plateau et éventuellement le mettre dans mcts
+	// rajouter etat a la place de plateau et éventuellement le mettre dans mcts
 	private int[][] plateau;
 
 	public Modele() {
@@ -26,7 +26,11 @@ public class Modele extends Observable {
 		while (plateau[x][y] != 0 & y > 0) {
 			y--;
 		}
-		plateau[x][y] = joueurActu;
+		
+		if (plateau[x][y] == 0) {
+			plateau[x][y] = joueurActu;
+		}
+		
 		changerJoueur();
 		miseAJour();
 	}
