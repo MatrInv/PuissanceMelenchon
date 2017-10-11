@@ -1,5 +1,6 @@
 package modele;
 
+import java.util.Iterator;
 import java.util.Observable;
 
 public class Modele extends Observable {
@@ -31,18 +32,6 @@ public class Modele extends Observable {
 				miseAJour();
 			}
 		}
-	}
-
-	public String tabToString() {
-		StringBuilder sb = new StringBuilder();
-		for (int y = 0; y < hauteur; y++) {
-			for (int x = 0; x < largeur; x++) {
-				sb.append(etatActu.getCase(x, y) + " ");
-			}
-			sb.append("\n");
-		}
-		sb.append("\n");
-		return sb.toString();
 	}
 
 	public void miseAJour() {
@@ -77,5 +66,4 @@ public class Modele extends Observable {
 	public int getJoueurActu() {
 		return joueurActu;
 	}
-
 }
