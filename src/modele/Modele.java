@@ -8,7 +8,7 @@ public class Modele extends Observable {
 	private int largeur = 7;
 	private MCTS mcts;
 	private int joueurActu;
-	// rajouter etat a la place de plateau et éventuellement le mettre dans mcts
+	// rajouter etat a la place de plateau et ï¿½ventuellement le mettre dans mcts
 	private Etat etatActu;
 
 	public Modele() {
@@ -22,15 +22,16 @@ public class Modele extends Observable {
 	}
 
 	public void jouerJeton(int x) {
-		if (etatActu.estFinal()) {
-			etatActu.nouvellePartie();
-		} else {
+		
 			if (etatActu.colJouable(x)) {
 				etatActu.jouerCol(x, joueurActu);
+				if(etatActu.estFinal(joueurActu,x)){
+					System.out.println("GagnÃ© pour le gros fils de chien !");
+				}
+				System.out.println(x+","+etatActu.hauteurDernierJeton(x));
 				changerJoueur();
 				miseAJour();
 			}
-		}
 	}
 
 	public String tabToString() {
