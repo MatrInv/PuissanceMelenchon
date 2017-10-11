@@ -9,37 +9,42 @@ public class Modele extends Observable {
 	private MCTS mcts;
 	private int joueurActu;
 	// rajouter etat a la place de plateau et éventuellement le mettre dans mcts
-	private int[][] plateau;
+	private Etat etatActu;
 
 	public Modele() {
 		// creer etat vide
+		etatActu = new Etat(largeur, hauteur);
 		joueurActu = 1;
-		plateau = new int[largeur][hauteur];
 	}
 
 	public int getCase(int x, int y) {
-		return plateau[x][y];
+		return etatActu.getCase(x,y);
 	}
 
 	public void jouerJeton(int x) {
-		int y = hauteur - 1;
-		while (plateau[x][y] != 0 & y > 0) {
+		/*int y = hauteur - 1;
+		while (etatActu.getCase(x,y) != 0 & y > 0) {
 			y--;
 		}
-		
-		if (plateau[x][y] == 0) {
-			plateau[x][y] = joueurActu;
+
+		if (etatActu.getCase(x,y) == 0) {
+			etatActu.getCase(x,y) = joueurActu;
+			changerJoueur();
+			miseAJour();
+		}*/
+		if(etatActu.colJouable(x)) {
+			etatActu.jouerCol(x, joueurActu);
+			changerJoueur();
+			miseAJour();
 		}
 		
-		changerJoueur();
-		miseAJour();
 	}
 
 	public String tabToString() {
 		StringBuilder sb = new StringBuilder();
 		for (int y = 0; y < hauteur; y++) {
 			for (int x = 0; x < largeur; x++) {
-				sb.append(plateau[x][y] + " ");
+				sb.append(etatActu.getCase(x,y) + " ");
 			}
 			sb.append("\n");
 		}
