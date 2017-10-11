@@ -19,12 +19,18 @@ public class Etat {
 		//largeur=l;
 		
 		plateau=new int[l][h];
-		for(int i=0;i<=l;i++){
+		/*for(int i=0;i<=l;i++){
 			for(int j=0;j<=h;j++){
 				plateau[i][j]=0;
 			}
-		}
+		}*/
 	}
+
+	public int getCase(int x, int y) {
+		return plateau[x][y];
+	}
+	
+	
 	
 	private int getNbCol(){
 		return plateau.length;
@@ -34,18 +40,17 @@ public class Etat {
 		return plateau[0].length;
 	}
 	
-	private void jouerCol(int noCol, int player){
-		if(colJouable(noCol)){
+	public void jouerCol(int noCol, int player){
 			int next=0;
-			while(plateau[noCol][next]==0){
+			while(getNbLig()>next && plateau[noCol][next]==0){
 				next++;
 			}
 			plateau[noCol][next-1]=player;
-		}
+		
 	}
 	
-	private boolean colJouable(int col){
-		return (col<getNbCol() && plateau[col][getNbLig()-1]==0);
+	public boolean colJouable(int col){
+		return (col<getNbCol() && plateau[col][0]==0);
 	}
 	
 }
