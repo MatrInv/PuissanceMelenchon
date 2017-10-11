@@ -18,33 +18,26 @@ public class Modele extends Observable {
 	}
 
 	public int getCase(int x, int y) {
-		return etatActu.getCase(x,y);
+		return etatActu.getCase(x, y);
 	}
 
 	public void jouerJeton(int x) {
-		/*int y = hauteur - 1;
-		while (etatActu.getCase(x,y) != 0 & y > 0) {
-			y--;
+		if (etatActu.estFinal()) {
+			etatActu.nouvellePartie();
+		} else {
+			if (etatActu.colJouable(x)) {
+				etatActu.jouerCol(x, joueurActu);
+				changerJoueur();
+				miseAJour();
+			}
 		}
-
-		if (etatActu.getCase(x,y) == 0) {
-			etatActu.getCase(x,y) = joueurActu;
-			changerJoueur();
-			miseAJour();
-		}*/
-		if(etatActu.colJouable(x)) {
-			etatActu.jouerCol(x, joueurActu);
-			changerJoueur();
-			miseAJour();
-		}
-		
 	}
 
 	public String tabToString() {
 		StringBuilder sb = new StringBuilder();
 		for (int y = 0; y < hauteur; y++) {
 			for (int x = 0; x < largeur; x++) {
-				sb.append(etatActu.getCase(x,y) + " ");
+				sb.append(etatActu.getCase(x, y) + " ");
 			}
 			sb.append("\n");
 		}
