@@ -48,4 +48,8 @@ public class Etat {
 		return (col<getNbCol() && plateau[col][getNbLig()-1]==0);
 	}
 	
+	private boolean estFinal(){
+		
+	}
+	
 }
