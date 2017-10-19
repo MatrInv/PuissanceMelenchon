@@ -10,14 +10,24 @@ public class Etat{
 	private int[][] plateau;
 	private Etat pere;
 	private Set<Etat> fils;
+	
+	private int joueur;
+	
+	private float mu;
+	private int n;
 
-	public Etat(int l, int h) {
+	public Etat(int l, int h, int premierJoueur) {
 		plateau = new int[l][h];
 		fils = new HashSet<Etat>();
+		
+		joueur=premierJoueur;
+		
+		mu=0;
+		n=0;
 	}
 	
 	private Etat cloneEtat(Etat e){
-		Etat nvEtat = new Etat(e.getNbCol(), e.getNbLig());
+		Etat nvEtat = new Etat(e.getNbCol(), e.getNbLig(), e.getJoueur());
 		for(int col = 0; col<e.getNbCol(); col++) {
 			for(int lig = 0; lig<e.getNbLig(); lig++) {
 				nvEtat.setCase(col, lig, e.getCase(col, lig));
@@ -195,6 +205,33 @@ public class Etat{
 		}
 		sb.append("\n");
 		return sb.toString();
+	}
+	
+	
+	//Fonction
+	
+	public void setMu(float u){
+		mu=u;
+	}
+	
+	public float getMu(){
+		return mu;
+	}
+	
+	public void setN(int m){
+		n=m;
+	}
+	
+	public int getN(){
+		return n;
+	}
+	
+	public float bVal(){
+		return (float) (joueur*mu+Math.sqrt(2*Math.log((double)pere.getN())/getN()));
+	}
+	
+	public int getJoueur(){
+		return joueur;
 	}
 
 }

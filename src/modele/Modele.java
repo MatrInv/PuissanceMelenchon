@@ -14,8 +14,8 @@ public class Modele extends Observable {
 
 	public Modele() {
 		// creer etat vide
-		etatActu = new Etat(largeur, hauteur);
 		joueurActu = 1;
+		etatActu = new Etat(largeur, hauteur, joueurActu);
 	}
 
 	public int getCase(int x, int y) {
@@ -67,4 +67,5 @@ public class Modele extends Observable {
 	public int getJoueurActu() {
 		return joueurActu;
 	}
+	
 }
