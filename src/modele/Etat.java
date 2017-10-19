@@ -73,6 +73,9 @@ public class Etat{
 		while (getNbLig() > next && plateau[noCol][next] == 0) {
 			next++;
 		}
+		if(estFinal(player,noCol)){
+			System.out.println("Bite");
+		}
 		plateau[noCol][next - 1] = player;
 	}
 
@@ -191,7 +194,7 @@ public class Etat{
 	}
 	
 	public boolean existeAlign(int player, int x){
-		return existeAlign(player, x, hauteurDernierJeton(x));
+		return existeAlign(player, x, hauteurDernierJeton(x)-1);
 	}
 	
 	public int hauteurDernierJeton(int x){
