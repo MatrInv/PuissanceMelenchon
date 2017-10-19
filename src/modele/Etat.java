@@ -92,6 +92,7 @@ public class Etat{
 		for(int col=0; col< getNbCol() ; col++) {
 			if(colJouable(col)) {
 				Etat e = cloneEtat(this);
+				e.setJoueur(joueur*-1);
 				e.jouerCol(col, joueur*-1);
 				e.setPere(this);
 				fils.add(e);
@@ -99,6 +100,10 @@ public class Etat{
 		}
 	}
 	
+	private void setJoueur(int i) {
+		joueur = i;
+	}
+
 	public Iterator<Etat> getFils(){
 		return  fils.iterator();	
 	}

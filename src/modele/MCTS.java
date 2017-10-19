@@ -29,14 +29,14 @@ public class MCTS {
 	
 	public int marcheAleatoire(Etat e) {
 		Etat etatFils = choixFilsAlea(e);
-		while(!e.estFinal()) {
+		System.out.println(etatFils.tabToString());
+		while(!etatFils.estFinal()) {
 			etatFils.calculFils(etatFils.getJoueur());
 			etatFils = choixFilsAlea(etatFils);
+			System.out.println(etatFils.getJoueur());
+			System.out.println(etatFils.tabToString());
 		}
-		if(etatFils.getJoueur() == Modele.JOUEUR)
-			return 0;
-		else
-			return 1;
+		return etatFils.getJoueur() == Modele.MACHINE ? 1 : 0;
 	}
 	
 	public void developperFils(Etat e) {
@@ -45,12 +45,7 @@ public class MCTS {
 	
 	public static void main(String[] args) {
 		MCTS m = new MCTS(new Etat(5,5, -1), 5,5);
-		System.out.println(m.etatActu.tabToString());
 		m.etatActu.calculFils(1);
-		Etat e = m.choixFilsAlea(m.etatActu);
-		System.out.println(e.tabToString());
-		e.calculFils(-1);
-		e = m.choixFilsAlea(e);
-		System.out.println(e.tabToString());
+		System.out.println(m.marcheAleatoire(m.etatActu));
 	}
 }
