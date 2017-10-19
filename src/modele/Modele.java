@@ -12,9 +12,9 @@ public class Modele extends Observable {
 	private Etat etatActu;
 
 	public Modele() {
-		etatActu = new Etat(largeur, hauteur);
-		mcts = new MCTS(etatActu, largeur, hauteur);
 		joueurActu = -1;
+		etatActu = new Etat(largeur, hauteur, joueurActu);
+		mcts = new MCTS(etatActu, largeur, hauteur);
 	}
 
 	public int getCase(int x, int y) {
@@ -58,4 +58,5 @@ public class Modele extends Observable {
 	public int getJoueurActu() {
 		return joueurActu;
 	}
+	
 }

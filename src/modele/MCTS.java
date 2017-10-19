@@ -9,7 +9,7 @@ public class MCTS {
 	private Etat racine;
 	
 	public MCTS (Etat etat, int largeur, int hauteur) {
-		racine = new Etat(largeur, hauteur);
+		racine = new Etat(largeur, hauteur, etat.getJoueur());
 		etatActu = etat;
 	}
 	
@@ -28,7 +28,7 @@ public class MCTS {
 	}
 	
 	public static void main(String[] args) {
-		MCTS m = new MCTS(new Etat(5,5), 5,5);
+		MCTS m = new MCTS(new Etat(5,5, -1), 5,5);
 		System.out.println(m.etatActu.tabToString());
 		m.etatActu.calculFils(1);
 		Etat e = m.choixFilsAlea(m.etatActu);
