@@ -27,6 +27,22 @@ public class MCTS {
 		return fils;
 	}
 	
+	public int marcheAleatoire(Etat e) {
+		Etat etatFils = choixFilsAlea(e);
+		while(!e.estFinal()) {
+			etatFils.calculFils(etatFils.getJoueur());
+			etatFils = choixFilsAlea(etatFils);
+		}
+		if(etatFils.getJoueur() == Modele.JOUEUR)
+			return 0;
+		else
+			return 1;
+	}
+	
+	public void developperFils(Etat e) {
+		e.calculFils(e.getJoueur());
+	}
+	
 	public static void main(String[] args) {
 		MCTS m = new MCTS(new Etat(5,5, -1), 5,5);
 		System.out.println(m.etatActu.tabToString());

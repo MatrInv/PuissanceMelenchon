@@ -10,6 +10,8 @@ public class Modele extends Observable {
 	private MCTS mcts;
 	private int joueurActu;
 	private Etat etatActu;
+	public final static int JOUEUR = -1;
+	public final static int MACHINE = 1;
 
 	public Modele() {
 		joueurActu = -1;

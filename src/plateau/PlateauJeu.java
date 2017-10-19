@@ -80,9 +80,9 @@ public class PlateauJeu extends JPanel implements Observer {
 	public void update(Observable arg0, Object arg1) {
 		for (int y = 0; y < m.getHauteur(); y++) {
 			for (int x = 0; x < m.getLargeur(); x++) {
-				if(m.getCase(x, y) == -1)
+				if(m.getCase(x, y) == Modele.JOUEUR)
 					plateau[x][y].setIcon(images[2]);
-				else if(m.getCase(x, y) == 1)
+				else if(m.getCase(x, y) == Modele.MACHINE)
 					plateau[x][y].setIcon(images[1]);
 			}
 		}
