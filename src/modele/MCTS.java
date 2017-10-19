@@ -15,16 +15,32 @@ public class MCTS {
 	
 	public Etat choixFilsAlea(Etat e) {
 		Random r = new Random();
-		//chiffre aleatoire de 1 à nombre de fils possible
+		//chiffre aleatoire de 1 ï¿½ nombre de fils possible
 		int i = r.nextInt(e.getNbFils()) + 1;
 		Iterator<Etat> it = e.getFils();
 		Etat fils = null;
-		//selection du ième fils
+		//selection du iï¿½me fils
 		while (it.hasNext() && i>=0) { 
 			fils = (Etat) it.next();
 			i--;
 		}
 		return fils;
+	}
+	
+	public void btUpdate(Etat e, int r){
+		
+		int ni=e.getN();
+		int newN=ni+1;
+		e.setN(newN);
+		
+		float mui=e.getMu();
+		float newMu=(ni*mui+r)/newN;
+		e.setMu(newMu);
+		
+		if(e.getPere()!=null){
+				btUpdate(e.getPere(),r);
+		}
+		
 	}
 	
 	public static void main(String[] args) {
