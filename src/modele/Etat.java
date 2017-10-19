@@ -212,7 +212,10 @@ public class Etat{
 		StringBuilder sb = new StringBuilder();
 		for (int y = 0; y < getNbLig(); y++) {
 			for (int x = 0; x < getNbCol(); x++) {
-				sb.append(plateau[x][y] + "   ");
+				if(plateau[x][y] == -1)
+					sb.append(plateau[x][y] + " ");
+				else
+					sb.append(" " + plateau[x][y] + " ");
 			}
 			sb.append("\n");
 		}
