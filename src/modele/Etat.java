@@ -11,6 +11,7 @@ public class Etat{
 	private Set<Etat> fils;
 	
 	private int joueur;
+	private boolean estFinal;
 	
 	private float mu;
 	private int n;
@@ -20,19 +21,27 @@ public class Etat{
 		fils = new HashSet<Etat>();
 		
 		joueur=premierJoueur;
+		estFinal=false;
 		
 		mu=0;
 		n=0;
 	}
 	
-	private Etat cloneEtat(Etat e){
-		Etat nvEtat = new Etat(e.getNbCol(), e.getNbLig(), e.getJoueur());
-		for(int col = 0; col<e.getNbCol(); col++) {
-			for(int lig = 0; lig<e.getNbLig(); lig++) {
-				nvEtat.setCase(col, lig, e.getCase(col, lig));
+	private Etat cloneEtat(){
+		Etat nvEtat = new Etat(getNbCol(), getNbLig(), getJoueur());
+		nvEtat.setMu(getMu());
+		nvEtat.setN(getN());
+		nvEtat.setEstFinal(estFinal);
+		for(int col = 0; col<getNbCol(); col++) {
+			for(int lig = 0; lig<getNbLig(); lig++) {
+				nvEtat.setCase(col, lig, getCase(col, lig));
 			}
 		}
 		return nvEtat;
+	}
+	
+	private void setEstFinal(boolean b){
+		estFinal=b;
 	}
 	
 	private void setPere(Etat e) {
@@ -91,9 +100,12 @@ public class Etat{
 	public void calculFils(int joueur) {
 		for(int col=0; col< getNbCol() ; col++) {
 			if(colJouable(col)) {
-				Etat e = cloneEtat(this);
+				Etat e = cloneEtat();
 				e.setJoueur(joueur*-1);
-				e.jouerCol(col, joueur*-1);
+				e.jouerCol(col, e.getJoueur());
+				if(e.estFinal(joueur,col)){
+					e.setEstFinal(true);
+				}
 				e.setPere(this);
 				fils.add(e);
 			}
@@ -109,14 +121,7 @@ public class Etat{
 	}
 	
 	public boolean estFinal() {
-
-		int i = 0;
-		while (i < getNbCol()) {
-			if (plateau[i][0] == 0)
-				return false;
-			i++;
-		}
-		return true;
+		return estPlein() || estFinal;
 	}
 	
 
