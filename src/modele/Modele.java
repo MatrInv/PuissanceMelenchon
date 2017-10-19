@@ -9,13 +9,12 @@ public class Modele extends Observable {
 	private int largeur = 7;
 	private MCTS mcts;
 	private int joueurActu;
-	// rajouter etat a la place de plateau et �ventuellement le mettre dans mcts
 	private Etat etatActu;
 
 	public Modele() {
-		// creer etat vide
 		etatActu = new Etat(largeur, hauteur);
-		joueurActu = 1;
+		mcts = new MCTS(etatActu, largeur, hauteur);
+		joueurActu = -1;
 	}
 
 	public int getCase(int x, int y) {
@@ -26,10 +25,6 @@ public class Modele extends Observable {
 		
 			if (etatActu.colJouable(x)) {
 				etatActu.jouerCol(x, joueurActu);
-				if(etatActu.estFinal(joueurActu,x)){
-					System.out.println("Gagné pour le gros fils de chien !");
-				}
-				System.out.println(x+","+etatActu.hauteurDernierJeton(x));
 				changerJoueur();
 				miseAJour();
 			}
@@ -41,11 +36,7 @@ public class Modele extends Observable {
 	}
 
 	public void changerJoueur() {
-		if (joueurActu == 1) {
-			joueurActu = 2;
-		} else {
-			joueurActu = 1;
-		}
+		joueurActu *= -1;
 	}
 
 	public int getHauteur() {

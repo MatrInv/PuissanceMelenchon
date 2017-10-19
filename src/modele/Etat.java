@@ -6,7 +6,6 @@ import java.util.Set;
 
 public class Etat{
 
-	private MCTS mcts;
 	private int[][] plateau;
 	private Etat pere;
 	private Set<Etat> fils;
@@ -79,19 +78,18 @@ public class Etat{
 		return pere;
 	}
 	
-	private void calculFils(int joueur) {
+	public void calculFils(int joueur) {
 		for(int col=0; col< getNbCol() ; col++) {
 			if(colJouable(col)) {
 				Etat e = cloneEtat(this);
-				e.jouerCol(col, joueur);
+				e.jouerCol(col, joueur*-1);
 				e.setPere(this);
 				fils.add(e);
 			}
 		}
 	}
 	
-	public Iterator<Etat> getFils(int joueur){
-		calculFils(joueur);
+	public Iterator<Etat> getFils(){
 		return  fils.iterator();	
 	}
 	
@@ -189,12 +187,16 @@ public class Etat{
 		StringBuilder sb = new StringBuilder();
 		for (int y = 0; y < getNbLig(); y++) {
 			for (int x = 0; x < getNbCol(); x++) {
-				sb.append(plateau[x][y] + " ");
+				sb.append(plateau[x][y] + "  ");
 			}
 			sb.append("\n");
 		}
 		sb.append("\n");
 		return sb.toString();
+	}
+
+	public int getNbFils() {
+		return fils.size();
 	}
 
 }
