@@ -46,7 +46,7 @@ public class Etat {
 	}
 
 	/**
-	 * développe tout les fils de l'état actuel
+	 * dï¿½veloppe tout les fils de l'ï¿½tat actuel
 	 * les fils se verront assigner du joueur suivant
 	 * @param joueur
 	 */
@@ -63,7 +63,7 @@ public class Etat {
 	}
 
 	/**
-	 * renvoie un clone de l'état actuel
+	 * renvoie un clone de l'ï¿½tat actuel
 	 * @return
 	 */
 	public Etat cloneEtat() {
@@ -95,8 +95,8 @@ public class Etat {
 		estFinal = b;
 	}
 
-	public boolean estFinal(int player, int x) {
-		return (estPlein() || existeAlign(player, x));
+	public boolean estFinal(int x) {
+		return (estPlein() || existeAlign(x));
 	}
 
 	/**
@@ -117,15 +117,15 @@ public class Etat {
 	}
 
 	/**
-	 * renvoie true si il y a un alignement de 4 jetons à partir du 
-	 * jeton de position x,y appartennant à player
+	 * renvoie true si il y a un alignement de 4 jetons ï¿½ partir du 
+	 * jeton de position x,y appartennant ï¿½ player
 	 * @param player
 	 * @param x
 	 * @param y
 	 * @return
 	 */
-	private boolean existeAlign(int player, int x, int y) {
-		int k = 0;
+	private boolean existeAlign(int x, int y) {
+		int k = 0, player=joueur;
 		int horiz = 0, verti = 0, diag1 = 0, diag2 = 0;
 		boolean nord = true, sud = true, est = true, ouest = true, nordest = true, nordouest = true, sudest = true,
 				sudouest = true; // ces var sont lÃ  pour indiquer si on est tombÃ© sur un jeton non-player en
@@ -189,12 +189,12 @@ public class Etat {
 		return false;
 	}
 
-	public boolean existeAlign(int player, int x) {
-		return existeAlign(player, x, hauteurDernierJeton(x));
+	public boolean existeAlign(int x) {
+		return existeAlign(x, hauteurDernierJeton(x));
 	}
 
 	/**
-	 * renvoie la ligne du dernier jeton posé dans la colonne x
+	 * renvoie la ligne du dernier jeton posï¿½ dans la colonne x
 	 * @param x
 	 * @return
 	 */
@@ -222,7 +222,7 @@ public class Etat {
 
 		plateau[noCol][next - 1] = player;
 
-		if (estFinal(player, noCol)) {
+		if (estFinal(noCol)) {
 			estFinal = true;
 		}
 		
