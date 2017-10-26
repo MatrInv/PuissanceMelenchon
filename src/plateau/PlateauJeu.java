@@ -2,6 +2,7 @@ package plateau;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
@@ -11,6 +12,7 @@ import java.util.Observer;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import modele.Modele;
@@ -85,6 +87,13 @@ public class PlateauJeu extends JPanel implements Observer {
 				else if(m.getCase(x, y) == Modele.MACHINE)
 					plateau[x][y].setIcon(images[1]);
 			}
+		}
+		if(m.fin()!= 0) {
+			if(m.fin()==1) 
+				JOptionPane.showMessageDialog(new Frame(), "La machine a gagné !");
+			if(m.fin()==-1)
+				JOptionPane.showMessageDialog(new Frame(), "Vous avez gagné !");
+			m.reset();
 		}
 	}
 }

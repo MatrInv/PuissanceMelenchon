@@ -10,19 +10,31 @@ public class Modele extends Observable {
 	private Etat etatActu;
 	public final static int JOUEUR = -1;
 	public final static int MACHINE = 1;
+	private final static int C = 1000;
 
 	public Modele() {
 		etatActu = new Etat(largeur, hauteur, JOUEUR);
-		mcts = new MCTS(etatActu, largeur, hauteur);
 	}
 
-	public void jouerJeton(int x) {
-			
-			if (etatActu.colJouable(x)) {
-				etatActu.jouerCol(x, etatActu.getJoueur());
-				System.out.println(etatActu.estFinal());
-				miseAJour();
+	public void jouerJeton(int x) {		
+			if(etatActu.getJoueur() == JOUEUR) {
+				if (etatActu.colJouable(x)) {
+					etatActu.jouerCol(x, etatActu.getJoueur());
+				}
+			}else {
+				etatActu.changerJoueur();
+				mcts = new MCTS(etatActu, largeur, hauteur, C);
+				etatActu = mcts.jouer();
+				}		
+			if(etatActu.estFinal()) {
+				if(etatActu.getJoueur()==-1) {
+					System.out.println("Le joueur a gagné !");
+				}else {
+					System.out.println("La machine a gagné !");
+				}
 			}
+			miseAJour();
+			etatActu.changerJoueur();
 	}
 
 	public void miseAJour() {
@@ -52,6 +64,18 @@ public class Modele extends Observable {
 
 	public int getJoueurActu() {
 		return etatActu.getJoueur();
+	}
+	
+	public int fin() {
+		if(etatActu.estFinal()) {
+			return etatActu.getJoueur();
+		}
+		return 0;
+	}
+	
+	public void reset() {
+		etatActu=new Etat(largeur,hauteur,JOUEUR);
+		miseAJour();
 	}
 	
 }
