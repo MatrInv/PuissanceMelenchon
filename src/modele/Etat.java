@@ -15,6 +15,8 @@ public class Etat {
 
 	private float mu;
 	private int n;
+	private final int C = 2;
+
 
 	//////////////////////////////
 	// Constructeur //
@@ -64,7 +66,7 @@ public class Etat {
 	 * renvoie un clone de l'état actuel
 	 * @return
 	 */
-	private Etat cloneEtat() {
+	public Etat cloneEtat() {
 		Etat nvEtat = new Etat(getNbCol(), getNbLig(), getJoueur());
 		nvEtat.setMu(getMu());
 		nvEtat.setN(getN());
@@ -223,6 +225,8 @@ public class Etat {
 		if (estFinal(player, noCol)) {
 			estFinal = true;
 		}
+		
+		joueur *= -1;
 	}
 
 	public void nouvellePartie() {
@@ -274,7 +278,7 @@ public class Etat {
 	}
 
 	public float bVal() {
-		return (float) (joueur * mu + Math.sqrt(2 * Math.log((double) pere.getN()) / getN()));
+		return (float) (joueur * mu + Math.sqrt(C * Math.log((double) pere.getN()) / getN()));
 	}
 
 	public String tabToString() {

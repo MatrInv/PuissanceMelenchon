@@ -7,22 +7,20 @@ public class Modele extends Observable {
 	private int hauteur = 6;
 	private int largeur = 7;
 	private MCTS mcts;
-	private int joueurActu;
 	private Etat etatActu;
 	public final static int JOUEUR = -1;
 	public final static int MACHINE = 1;
 
 	public Modele() {
-		joueurActu = -1;
-		etatActu = new Etat(largeur, hauteur, joueurActu);
+		etatActu = new Etat(largeur, hauteur, JOUEUR);
 		mcts = new MCTS(etatActu, largeur, hauteur);
 	}
 
 	public void jouerJeton(int x) {
 			
 			if (etatActu.colJouable(x)) {
-				etatActu.jouerCol(x, joueurActu);
-				changerJoueur();
+				etatActu.jouerCol(x, etatActu.getJoueur());
+				System.out.println(etatActu.estFinal());
 				miseAJour();
 			}
 	}
@@ -34,10 +32,6 @@ public class Modele extends Observable {
 	
 	public int getCase(int x, int y) {
 		return etatActu.getCase(x, y);
-	}
-
-	public void changerJoueur() {
-		joueurActu *= -1;
 	}
 
 	public int getHauteur() {
@@ -57,7 +51,7 @@ public class Modele extends Observable {
 	}
 
 	public int getJoueurActu() {
-		return joueurActu;
+		return etatActu.getJoueur();
 	}
 	
 }

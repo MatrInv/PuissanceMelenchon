@@ -1,7 +1,9 @@
 package modele;
 
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Random;
+import java.util.Set;
 
 public class MCTS {
 
@@ -10,7 +12,30 @@ public class MCTS {
 
 	public MCTS(Etat etat, int largeur, int hauteur) {
 		racine = new Etat(largeur, hauteur, etat.getJoueur());
-		etatActu = etat;
+		etatActu = etat.cloneEtat();
+	}
+	
+	/**
+	 * retourne le noeud avec la plus grande bvaleur et dont les fils ne sont pas tous developpes
+	 * @param e
+	 * @param bValeur
+	 * @return
+	 */
+	private Etat noeudRec(Etat e, float bValeur) {
+		if(racine.getNbFils() > 0) {
+			 if(filsNonDeveloppes(e).size() > 0 || e.estFinal()) {
+				 return e;
+			 }
+			 Iterator<Etat> it = e.getFils();
+			 Etat etatActu = null;
+			 while(it.hasNext()) {
+				 float bValeurEtatActu = etatActu.bVal();
+				 if(bValeurEtatActu > e.bVal()) {
+					 noeudRec(etatActu, bValeurEtatActu);
+				 }
+			 }
+		}
+		return e;
 	}
 	
 	/**
@@ -19,11 +44,13 @@ public class MCTS {
 	 * @return
 	 */
 
-	public Etat choixFilsAlea(Etat e) {
+	private Etat choixFilsAlea(Etat e) {
 		Random r = new Random();
+		//selectionne tout les fils non developpes
+		Set<Etat> listeFilsNonDev = filsNonDeveloppes(e);
 		// chiffre aleatoire de 1 ï¿½ nombre de fils possible
-		int i = r.nextInt(e.getNbFils()) + 1;
-		Iterator<Etat> it = e.getFils();
+		int i = r.nextInt(listeFilsNonDev.size()) + 1;
+		Iterator<Etat> it = listeFilsNonDev.iterator();
 		Etat fils = null;
 		// selection du iï¿½me fils
 		while (it.hasNext() && i >= 0) {
@@ -32,6 +59,25 @@ public class MCTS {
 		}
 		return fils;
 	}
+	
+	/**
+	 * selectionne tout les fils non developpes d'un etat e
+	 * @param e
+	 * @return
+	 */
+	private Set<Etat> filsNonDeveloppes(Etat e){
+		Set<Etat> listeEtat = new HashSet<Etat>(e.getNbFils());
+		if(e.getNbFils() > 0) {
+			Iterator<Etat> it = e.getFils();
+			while(it.hasNext()) {
+				Etat etat = it.next();
+				if(etat.getNbFils() == 0) {
+					listeEtat.add(etat);
+				}
+			}
+		}
+		return listeEtat;
+	}
 
 	/**
 	 * joue une partie jusqu'à un état final en partant de l'état e
@@ -39,9 +85,9 @@ public class MCTS {
 	 * @return
 	 */
 	
-	public int marcheAleatoire(Etat e) {
+	private int marcheAleatoire(Etat e) {
 		Etat etatFils = e;
-		//teste si les fils ont bien été créés dans e, sinon les crée si e n'est pas etat final
+		//teste si les fils ont bien été créés dans e, sinon les crée si e n'est pas un etat final
 		if(e.getNbFils() != 0)
 			etatFils = choixFilsAlea(e);
 		else if(!etatFils.estFinal())
@@ -61,7 +107,7 @@ public class MCTS {
 	 * @param r
 	 */
 	
-	public void btUpdate(Etat e, int r) {
+	private void btUpdate(Etat e, int r) {
 
 		int ni = e.getN();
 		int newN = ni + 1;
