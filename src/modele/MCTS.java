@@ -12,6 +12,12 @@ public class MCTS {
 		racine = new Etat(largeur, hauteur, etat.getJoueur());
 		etatActu = etat;
 	}
+	
+	/**
+	 * choisit un fils aléatoire parmi les fils développés d'un état e
+	 * @param e
+	 * @return
+	 */
 
 	public Etat choixFilsAlea(Etat e) {
 		Random r = new Random();
@@ -27,18 +33,34 @@ public class MCTS {
 		return fils;
 	}
 
+	/**
+	 * joue une partie jusqu'à un état final en partant de l'état e
+	 * @param e
+	 * @return
+	 */
+	
 	public int marcheAleatoire(Etat e) {
-		Etat etatFils = choixFilsAlea(e);
-		System.out.println(etatFils.tabToString());
+		Etat etatFils = e;
+		//teste si les fils ont bien été créés dans e, sinon les crée si e n'est pas etat final
+		if(e.getNbFils() != 0)
+			etatFils = choixFilsAlea(e);
+		else if(!etatFils.estFinal())
+			etatFils.calculFils(etatFils.getJoueur());
+		//boucle qui calcule de nouveaux fils, et joue jusqu a un etat final
 		while (!etatFils.estFinal()) {
 			etatFils.calculFils(etatFils.getJoueur());
 			etatFils = choixFilsAlea(etatFils);
-			System.out.println(etatFils.getJoueur());
-			System.out.println(etatFils.tabToString());
 		}
+		//retourne le joueur qui a declanche l etat final 
 		return etatFils.getJoueur() == Modele.MACHINE ? 1 : 0;
 	}
 
+	/**
+	 * met à jour les valeurs N(i) et mu(i) contenues dans un état e avec la récompense r
+	 * @param e
+	 * @param r
+	 */
+	
 	public void btUpdate(Etat e, int r) {
 
 		int ni = e.getN();
@@ -52,11 +74,10 @@ public class MCTS {
 		if (e.getPere() != null) {
 			btUpdate(e.getPere(), r);
 		}
-
 	}
 
 	public static void main(String[] args) {
-		MCTS m = new MCTS(new Etat(5, 5, -1), 5, 5);
+		MCTS m = new MCTS(new Etat(7, 6, -1), 7, 6);
 		m.etatActu.calculFils(1);
 		System.out.println(m.marcheAleatoire(m.etatActu));
 	}

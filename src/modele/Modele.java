@@ -1,6 +1,5 @@
 package modele;
 
-import java.util.Iterator;
 import java.util.Observable;
 
 public class Modele extends Observable {
@@ -19,12 +18,8 @@ public class Modele extends Observable {
 		mcts = new MCTS(etatActu, largeur, hauteur);
 	}
 
-	public int getCase(int x, int y) {
-		return etatActu.getCase(x, y);
-	}
-
 	public void jouerJeton(int x) {
-		
+			
 			if (etatActu.colJouable(x)) {
 				etatActu.jouerCol(x, joueurActu);
 				changerJoueur();
@@ -35,6 +30,10 @@ public class Modele extends Observable {
 	public void miseAJour() {
 		this.setChanged();
 		this.notifyObservers();
+	}
+	
+	public int getCase(int x, int y) {
+		return etatActu.getCase(x, y);
 	}
 
 	public void changerJoueur() {
