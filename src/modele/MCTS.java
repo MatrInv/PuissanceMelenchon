@@ -9,15 +9,17 @@ import com.sun.org.apache.regexp.internal.recompile;
 
 public class MCTS {
 
-	private Etat etatActu;
 	private Etat racine;
 	private int nbParties;
+	private float estimationProbaVictoire;
 	private float tps;
 	private Random r;
+	public final static double C = 1000 ;
 
 	public MCTS(Etat etat, int largeur, int hauteur, float tps) {
 		racine = etat.cloneEtat();
 		nbParties = 0;
+		estimationProbaVictoire = 0;
 		this.tps = tps;
 	}
 
@@ -27,6 +29,7 @@ public class MCTS {
 		int recompense = 0;
 		Etat e = racine;
 		Etat filsAlea = racine;
+		
 		while (System.currentTimeMillis() - tempsDebut <= tps) {
 			nbParties++;
 			e = rechercheBValMax(racine);
@@ -38,7 +41,9 @@ public class MCTS {
 			recompense = marcheAleatoire(filsAlea);
 			btUpdate(filsAlea, recompense);
 		}
-		return meilleureMoyDsFils(racine).cloneEtat();
+		e = meilleureMoyDsFils(racine).cloneEtat();
+		estimationProbaVictoire = e.getMu();
+		return e;
 	}
 
 	public Etat meilleureMoyDsFils(Etat e) {
@@ -212,5 +217,13 @@ public class MCTS {
 		Etat e = new Etat(7, 6, -1);
 		MCTS m = new MCTS(e, 7, 6, 2);
 		m.test();
+	}
+
+	public int nbSimulations() {
+		return nbParties;
+	}
+
+	public float estimation() {
+		return estimationProbaVictoire;
 	}
 }

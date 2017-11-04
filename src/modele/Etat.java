@@ -15,7 +15,6 @@ public class Etat {
 
 	private float mu;
 	private int n;
-	private final int C = 1000;
 
 	//////////////////////////////
 	// Constructeur //
@@ -280,9 +279,10 @@ public class Etat {
 	}
 
 	public float bVal() {
-		return (float) (joueur * mu + Math.sqrt(C * Math.log((double) pere.getN()) / getN()));
+		return (float) (joueur * mu + Math.sqrt(MCTS.C * Math.log((double) pere.getN()) / getN()));
 	}
 
+	
 	public String tabToString() {
 		StringBuilder sb = new StringBuilder();
 		for (int y = 0; y < getNbLig(); y++) {
