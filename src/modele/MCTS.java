@@ -5,8 +5,6 @@ import java.util.Iterator;
 import java.util.Random;
 import java.util.Set;
 
-import com.sun.org.apache.regexp.internal.recompile;
-
 public class MCTS {
 
 	private Etat racine;
@@ -14,7 +12,7 @@ public class MCTS {
 	private float estimationProbaVictoire;
 	private float tps;
 	private Random r;
-	public final static double C = 1000 ;
+	public final static double C = Math.sqrt(2) ;
 
 	public MCTS(Etat etat, int largeur, int hauteur, float tps) {
 		racine = etat.cloneEtat();
@@ -56,6 +54,9 @@ public class MCTS {
 			etatActu = it.next();
 			moyEtatActu = etatActu.getMu();
 			if (moyEtatActu >= plusGrandeMoy) {
+				//condition qui retourne directement un état si celui ci est final
+				if(etatActu.estFinal())
+					return etatActu;
 				etatPlusGrandeMoy = etatActu;
 				plusGrandeMoy = moyEtatActu;
 			}
@@ -191,6 +192,14 @@ public class MCTS {
 			btUpdate(e.getPere(), r);
 		}
 	}
+	
+	public int nbSimulations() {
+		return nbParties;
+	}
+
+	public float estimation() {
+		return estimationProbaVictoire;
+	}
 
 	public void test() {
 
@@ -219,11 +228,5 @@ public class MCTS {
 		m.test();
 	}
 
-	public int nbSimulations() {
-		return nbParties;
-	}
-
-	public float estimation() {
-		return estimationProbaVictoire;
-	}
+	
 }

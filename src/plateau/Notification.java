@@ -51,7 +51,7 @@ public class Notification extends JPanel implements Observer {
 	@Override
 	public void update(Observable o, Object arg) {
 
-		if (m.getJoueurActu() == m.MACHINE) {
+		if (m.getJoueurActu() == m.JOUEUR) {
 			message.setText("A vous de jouer");
 			estimation.setText("Estimation Victoire : " + m.estimation() * 100 + "%");
 			simulation.setText("Simulations : " + m.nbSimulations());
@@ -60,9 +60,9 @@ public class Notification extends JPanel implements Observer {
 			resetDonnees();
 		}
 		if (m.estFini()) {
-			if (m.gagnant() == 1)
+			if (m.getJoueurActu() == m.MACHINE)
 				message.setText("La machine a gagné !");
-			if (m.gagnant() == -1)
+			if (m.getJoueurActu() == m.JOUEUR)
 				message.setText("Vous avez gagné !");
 			resetDonnees();
 
