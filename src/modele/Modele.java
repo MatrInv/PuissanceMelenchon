@@ -8,28 +8,47 @@ public class Modele extends Observable {
 	private int largeur = 7;
 	private MCTS mcts;
 	private Etat etatActu;
+	private int joueurActu;
 	public final static int JOUEUR = -1;
 	public final static int MACHINE = 1;
+	private int tpsMCTS = 1000;
+	private boolean fini = false;
 
 	public Modele() {
 		etatActu = new Etat(largeur, hauteur, JOUEUR);
-		mcts = new MCTS(etatActu, largeur, hauteur);
+		joueurActu = JOUEUR;
 	}
 
 	public void jouerJeton(int x) {
-			
+
+		if (joueurActu == JOUEUR) {
 			if (etatActu.colJouable(x)) {
 				etatActu.jouerCol(x, etatActu.getJoueur());
-				System.out.println(etatActu.estFinal());
-				miseAJour();
+				joueurActu *= -1;
 			}
+		} else {
+			mcts = new MCTS(etatActu, largeur, hauteur, tpsMCTS);
+			etatActu = mcts.jouer();
+			joueurActu *= -1;
+			etatActu.changerJoueur();
+		}
+		miseAJour();
+
+		if (etatActu.estFinal())
+			fini = true;
+	}
+
+	public void jouerMCTS() {
+		mcts = new MCTS(etatActu, largeur, hauteur, tpsMCTS);
+		etatActu = mcts.jouer();
+		miseAJour();
 	}
 
 	public void miseAJour() {
-		this.setChanged();
-		this.notifyObservers();
+		setChanged();
+		notifyObservers();
 	}
-	
+
 	public int getCase(int x, int y) {
 		return etatActu.getCase(x, y);
 	}
@@ -51,7 +70,25 @@ public class Modele extends Observable {
 	}
 
 	public int getJoueurActu() {
-		return etatActu.getJoueur();
+		return joueurActu;
 	}
-	
+
+	public boolean estFini() {
+		return fini;
+	}
+
+	public void reset() {
+		etatActu = new Etat(largeur, hauteur, JOUEUR);
+		joueurActu = JOUEUR;
+		fini = false;
+	}
+
+	public int nbSimulations() {
+		return mcts.nbSimulations();
+	}
+
+	public float estimation() {
+		return mcts.estimation();
+	}
+
 }

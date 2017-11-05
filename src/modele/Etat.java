@@ -15,8 +15,6 @@ public class Etat {
 
 	private float mu;
 	private int n;
-	private final int C = 2;
-
 
 	//////////////////////////////
 	// Constructeur //
@@ -46,8 +44,9 @@ public class Etat {
 	}
 
 	/**
-	 * d�veloppe tout les fils de l'�tat actuel
-	 * les fils se verront assigner du joueur suivant
+	 * d�veloppe tout les fils de l'�tat actuel les fils se verront assigner du
+	 * joueur suivant
+	 * 
 	 * @param joueur
 	 */
 	public void calculFils(int joueur) {
@@ -64,6 +63,7 @@ public class Etat {
 
 	/**
 	 * renvoie un clone de l'�tat actuel
+	 * 
 	 * @return
 	 */
 	public Etat cloneEtat() {
@@ -78,11 +78,11 @@ public class Etat {
 		}
 		return nvEtat;
 	}
-	
+
 	public Iterator<Etat> getFils() {
 		return fils.iterator();
 	}
-	
+
 	public int getNbFils() {
 		return fils.size();
 	}
@@ -101,6 +101,7 @@ public class Etat {
 
 	/**
 	 * renvoie true si le plateau est rempli
+	 * 
 	 * @return
 	 */
 	private boolean estPlein() {
@@ -117,8 +118,10 @@ public class Etat {
 	}
 
 	/**
-	 * renvoie true si il y a un alignement de 4 jetons � partir du 
-	 * jeton de position x,y appartennant � player
+
+	 * renvoie true si il y a un alignement de 4 jetons � partir du jeton de
+	 * position x,y appartennant � player
+	 * 
 	 * @param player
 	 * @param x
 	 * @param y
@@ -195,6 +198,7 @@ public class Etat {
 
 	/**
 	 * renvoie la ligne du dernier jeton pos� dans la colonne x
+	 * 
 	 * @param x
 	 * @return
 	 */
@@ -207,13 +211,13 @@ public class Etat {
 	}
 
 	//////////////////////////////
-	// Gestion Etat  //
+	// Gestion Etat //
 	/////////////////////////////
-	
+
 	public boolean colJouable(int col) {
 		return (col < getNbCol() && plateau[col][0] == 0);
 	}
-	
+
 	public void jouerCol(int noCol, int player) {
 		int next = 0;
 		while (getNbLig() > next && plateau[noCol][next] == 0) {
@@ -225,18 +229,16 @@ public class Etat {
 		if (estFinal(noCol)) {
 			estFinal = true;
 		}
-		
-		joueur *= -1;
 	}
-
-	public void nouvellePartie() {
-		plateau = new int[getNbCol()][getNbLig()];
+	
+	public void changerJoueur() {
+		joueur *= -1;
 	}
 
 	public int getCase(int x, int y) {
 		return plateau[x][y];
 	}
-	
+
 	private void setCase(int x, int y, int val) {
 		plateau[x][y] = val;
 	}
@@ -278,9 +280,10 @@ public class Etat {
 	}
 
 	public float bVal() {
-		return (float) (joueur * mu + Math.sqrt(C * Math.log((double) pere.getN()) / getN()));
+		return (float) (joueur * mu + Math.sqrt(MCTS.C * Math.log((double) pere.getN()) / getN()));
 	}
 
+	
 	public String tabToString() {
 		StringBuilder sb = new StringBuilder();
 		for (int y = 0; y < getNbLig(); y++) {

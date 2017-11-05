@@ -7,46 +7,113 @@ import java.util.Set;
 
 public class MCTS {
 
-	private Etat etatActu;
 	private Etat racine;
+	private int nbParties;
+	private float estimationProbaVictoire;
+	private float tps;
+	private Random r;
+	public final static double C = Math.sqrt(2) ;
 
-	public MCTS(Etat etat, int largeur, int hauteur) {
-		racine = new Etat(largeur, hauteur, etat.getJoueur());
-		etatActu = etat.cloneEtat();
+	public MCTS(Etat etat, int largeur, int hauteur, float tps) {
+		racine = etat.cloneEtat();
+		nbParties = 0;
+		estimationProbaVictoire = 0;
+		this.tps = tps;
 	}
-	
+
+	public Etat jouer() {
+		long tempsDebut = System.currentTimeMillis();
+		racine.calculFils(racine.getJoueur());
+		int recompense = 0;
+		Etat e = racine;
+		Etat filsAlea = racine;
+		
+		while (System.currentTimeMillis() - tempsDebut <= tps) {
+			nbParties++;
+			e = rechercheBValMax(racine);
+			filsAlea = e;
+			if (filsNonDeveloppes(e).size() > 0) {
+				filsAlea = choixFilsAlea(e);
+				filsAlea.calculFils(filsAlea.getJoueur());
+			}
+			recompense = marcheAleatoire(filsAlea);
+			btUpdate(filsAlea, recompense);
+		}
+		e = meilleureMoyDsFils(racine).cloneEtat();
+		estimationProbaVictoire = e.getMu();
+		return e;
+	}
+
+	public Etat meilleureMoyDsFils(Etat e) {
+		Iterator<Etat> it = e.getFils();
+		Etat etatActu = null;
+		float moyEtatActu;
+		Etat etatPlusGrandeMoy = null;
+		float plusGrandeMoy = 0;
+		while (it.hasNext()) {
+			etatActu = it.next();
+			moyEtatActu = etatActu.getMu();
+			if (moyEtatActu >= plusGrandeMoy) {
+				//condition qui retourne directement un état si celui ci est final
+				if(etatActu.estFinal())
+					return etatActu;
+				etatPlusGrandeMoy = etatActu;
+				plusGrandeMoy = moyEtatActu;
+			}
+		}
+		return etatPlusGrandeMoy;
+	}
+
+	public Etat meilleureBValDsFils(Etat e) {
+		Iterator<Etat> it = e.getFils();
+		Etat etatActu = null;
+		float bValeurEtatActu;
+		Etat etatPlusGrandeBValeur = null;
+		float plusGrandeBVal = Float.MIN_VALUE;
+		while (it.hasNext()) {
+			etatActu = it.next();
+			bValeurEtatActu = etatActu.bVal();
+			if (bValeurEtatActu >= plusGrandeBVal) {
+				etatPlusGrandeBValeur = etatActu;
+				plusGrandeBVal = bValeurEtatActu;
+			}
+		}
+
+		return etatPlusGrandeBValeur;
+	}
+
 	/**
-	 * retourne le noeud avec la plus grande bvaleur et dont les fils ne sont pas tous developpes
+	 * retourne le noeud avec la plus grande bvaleur et dont les fils ne sont pas
+	 * tous developpes
+	 * 
 	 * @param e
 	 * @param bValeur
 	 * @return
 	 */
-	private Etat noeudRec(Etat e, float bValeur) {
-		if(racine.getNbFils() > 0) {
-			 if(filsNonDeveloppes(e).size() > 0 || e.estFinal()) {
-				 return e;
-			 }
-			 Iterator<Etat> it = e.getFils();
-			 Etat etatActu = null;
-			 while(it.hasNext()) {
-				 float bValeurEtatActu = etatActu.bVal();
-				 if(bValeurEtatActu > e.bVal()) {
-					 noeudRec(etatActu, bValeurEtatActu);
-				 }
-			 }
+	private Etat rechercheBValMax(Etat e) {
+		if (e.getNbFils() > 0 && !e.estFinal()) {
+			if (filsNonDeveloppes(e).size() > 0) {
+				return e;
+			}
+
+			Etat etatPlusGrandeBValeur = meilleureBValDsFils(e);
+			if (etatPlusGrandeBValeur != null) {
+				e = rechercheBValMax(etatPlusGrandeBValeur);
+			}
 		}
 		return e;
 	}
-	
+
 	/**
 	 * choisit un fils aléatoire parmi les fils développés d'un état e
+	 * 
 	 * @param e
 	 * @return
 	 */
 
 	private Etat choixFilsAlea(Etat e) {
-		Random r = new Random();
-		//selectionne tout les fils non developpes
+		r = new Random();
+		// selectionne tout les fils non developpes
 		Set<Etat> listeFilsNonDev = filsNonDeveloppes(e);
 		// chiffre aleatoire de 1 ï¿½ nombre de fils possible
 		int i = r.nextInt(listeFilsNonDev.size()) + 1;
@@ -57,21 +124,23 @@ public class MCTS {
 			fils = (Etat) it.next();
 			i--;
 		}
+
 		return fils;
 	}
-	
+
 	/**
 	 * selectionne tout les fils non developpes d'un etat e
+	 * 
 	 * @param e
 	 * @return
 	 */
-	private Set<Etat> filsNonDeveloppes(Etat e){
+	private Set<Etat> filsNonDeveloppes(Etat e) {
 		Set<Etat> listeEtat = new HashSet<Etat>(e.getNbFils());
-		if(e.getNbFils() > 0) {
+		if (e.getNbFils() > 0) {
 			Iterator<Etat> it = e.getFils();
-			while(it.hasNext()) {
+			while (it.hasNext()) {
 				Etat etat = it.next();
-				if(etat.getNbFils() == 0) {
+				if (etat.getNbFils() == 0) {
 					listeEtat.add(etat);
 				}
 			}
@@ -81,32 +150,34 @@ public class MCTS {
 
 	/**
 	 * joue une partie jusqu'à un état final en partant de l'état e
+	 * 
 	 * @param e
 	 * @return
 	 */
-	
+
 	private int marcheAleatoire(Etat e) {
 		Etat etatFils = e;
-		//teste si les fils ont bien été créés dans e, sinon les crée si e n'est pas un etat final
-		if(e.getNbFils() != 0)
+		// teste si les fils ont bien été créés dans e, sinon les crée si e n'est pas un
+		// etat final
+		if (e.getNbFils() != 0 && !etatFils.estFinal() && filsNonDeveloppes(e).size() > 0)
 			etatFils = choixFilsAlea(e);
-		else if(!etatFils.estFinal())
-			etatFils.calculFils(etatFils.getJoueur());
-		//boucle qui calcule de nouveaux fils, et joue jusqu a un etat final
+		// boucle qui calcule de nouveaux fils, et joue jusqu a un etat final
 		while (!etatFils.estFinal()) {
 			etatFils.calculFils(etatFils.getJoueur());
 			etatFils = choixFilsAlea(etatFils);
 		}
-		//retourne le joueur qui a declanche l etat final 
+		// retourne le joueur qui a declanche l etat final
 		return etatFils.getJoueur() == Modele.MACHINE ? 1 : 0;
 	}
 
 	/**
-	 * met à jour les valeurs N(i) et mu(i) contenues dans un état e avec la récompense r
+	 * met à jour les valeurs N(i) et mu(i) contenues dans un état e avec la
+	 * récompense r
+	 * 
 	 * @param e
 	 * @param r
 	 */
-	
+
 	private void btUpdate(Etat e, int r) {
 
 		int ni = e.getN();
@@ -114,17 +185,48 @@ public class MCTS {
 		e.setN(newN);
 
 		float mui = e.getMu();
-		float newMu = (ni * mui + r) / newN;
+		float newMu = ((float) ni * mui + (float) r) / (float) newN;
 		e.setMu(newMu);
 
 		if (e.getPere() != null) {
 			btUpdate(e.getPere(), r);
 		}
 	}
+	
+	public int nbSimulations() {
+		return nbParties;
+	}
+
+	public float estimation() {
+		return estimationProbaVictoire;
+	}
+
+	public void test() {
+
+		racine.calculFils(racine.getJoueur());
+		Iterator<Etat> it = racine.getFils();
+		Etat etat = null;
+		while (it.hasNext()) {
+			etat = it.next();
+		}
+		etat = rechercheBValMax(racine);
+
+		etat = choixFilsAlea(etat);
+		int recompense = marcheAleatoire(etat);
+		btUpdate(etat, recompense);
+
+		// deuxieme it
+
+		etat = rechercheBValMax(racine);
+
+		etat = choixFilsAlea(etat);
+	}
 
 	public static void main(String[] args) {
-		MCTS m = new MCTS(new Etat(7, 6, -1), 7, 6);
-		m.etatActu.calculFils(1);
-		System.out.println(m.marcheAleatoire(m.etatActu));
+		Etat e = new Etat(7, 6, -1);
+		MCTS m = new MCTS(e, 7, 6, 2);
+		m.test();
 	}
+
+	
 }

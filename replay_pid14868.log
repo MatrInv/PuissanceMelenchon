@@ -1,0 +1,14 @@
+JvmtiExport can_access_local_variables 0
+JvmtiExport can_hotswap_or_post_breakpoint 0
+JvmtiExport can_post_on_exceptions 0
+# 179 ciObject found
+ciMethod java/lang/Object <init> ()V 4097 1 98569 0 -1
+ciMethod java/util/List size ()I 0 0 1 0 -1
+ciMethodData java/lang/Object <init> ()V 2 98569 orig 264 88 66 94 119 0 0 0 0 104 4 172 24 0 0 0 0 32 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 77 68 79 32 101 120 116 114 97 32 100 97 116 97 32 108 111 99 107 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2 0 0 73 248 11 0 1 0 0 0 0 0 0 0 0 0 0 0 2 0 0 0 0 0 3 0 1 0 0 0 0 0 0 0 255 255 255 255 0 0 0 0 0 0 0 0 data 0 oops 0
+ciMethod java/awt/Window getBackground ()Ljava/awt/Color; 2049 1 634 0 -1
+ciMethod java/awt/Window isOpaque ()Z 2065 1 629 0 -1
+ciMethod java/awt/Container getComponentCount ()I 3169 1 856 0 -1
+ciMethod java/awt/Container countComponents ()I 2049 1 910 0 -1
+ciMethod java/awt/Container getComponent (I)Ljava/awt/Component; 4097 1 1561 0 -1
+ciMethod java/awt/Component getParent ()Ljava/awt/Container; 3353 1 5826 0 -1
+ciMethod 
