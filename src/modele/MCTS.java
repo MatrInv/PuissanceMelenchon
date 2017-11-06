@@ -12,6 +12,7 @@ public class MCTS {
 	private float estimationProbaVictoire;
 	private float tps;
 	private Random r;
+	private int crit;
 	public final static double C = Math.sqrt(2) ;
 
 	public MCTS(Etat etat, int largeur, int hauteur, float tps) {
@@ -19,6 +20,7 @@ public class MCTS {
 		nbParties = 0;
 		estimationProbaVictoire = 0;
 		this.tps = tps;
+		crit=Modele.CRITROBUSTE;
 	}
 
 	public Etat jouer() {
@@ -39,7 +41,7 @@ public class MCTS {
 			recompense = marcheAleatoire(filsAlea);
 			btUpdate(filsAlea, recompense);
 		}
-		e = meilleureMoyDsFils(racine).cloneEtat();
+		e = meilleureFilsSelonCritere(racine).cloneEtat();
 		estimationProbaVictoire = e.getMu();
 		return e;
 	}
@@ -54,7 +56,7 @@ public class MCTS {
 			etatActu = it.next();
 			moyEtatActu = etatActu.getMu();
 			if (moyEtatActu >= plusGrandeMoy) {
-				//condition qui retourne directement un état si celui ci est final
+				//condition qui retourne directement un ï¿½tat si celui ci est final
 				if(etatActu.estFinal())
 					return etatActu;
 				etatPlusGrandeMoy = etatActu;
@@ -81,7 +83,51 @@ public class MCTS {
 
 		return etatPlusGrandeBValeur;
 	}
+	
+	
+	public Etat meilleurNDsFils(Etat e){
+		Iterator<Etat> it = e.getFils();
+		Etat etatActu = null;
+		float NEtatActu;
+		Etat etatPlusGrandN = null;
+		float plusGrandN = 0;
+		while (it.hasNext()) {
+			etatActu = it.next();
+			NEtatActu = etatActu.getN();
+			if (NEtatActu >= plusGrandN) {
+				etatPlusGrandN = etatActu;
+				plusGrandN = NEtatActu;
+			}
+		}
 
+		return etatPlusGrandN;
+	}
+	
+	
+	
+	/**
+	 * retourne le noeud avec la plus grande valeur selon le critere (Robuste ou Max) et dont les fils ne sont pas
+	 * tous developpes
+	 * 
+	 * @param e
+	 * @param valeur
+	 * @return
+	 */
+	private Etat meilleureFilsSelonCritere(Etat e) {
+		switch(crit){
+			case Modele.CRITROBUSTE:
+				return meilleurNDsFils(e);
+			case Modele.CRITMAX:
+				return meilleureMoyDsFils(e);
+			default:
+				System.out.println("Critere inappropriÃ©: recherche Robuste");
+				return rechercheBValMax(e);
+		}
+		
+	}
+
+	
+	
 	/**
 	 * retourne le noeud avec la plus grande bvaleur et dont les fils ne sont pas
 	 * tous developpes
@@ -103,9 +149,11 @@ public class MCTS {
 		}
 		return e;
 	}
+	
+	
 
 	/**
-	 * choisit un fils aléatoire parmi les fils développés d'un état e
+	 * choisit un fils alï¿½atoire parmi les fils dï¿½veloppï¿½s d'un ï¿½tat e
 	 * 
 	 * @param e
 	 * @return
@@ -149,7 +197,7 @@ public class MCTS {
 	}
 
 	/**
-	 * joue une partie jusqu'à un état final en partant de l'état e
+	 * joue une partie jusqu'ï¿½ un ï¿½tat final en partant de l'ï¿½tat e
 	 * 
 	 * @param e
 	 * @return
@@ -157,7 +205,7 @@ public class MCTS {
 
 	private int marcheAleatoire(Etat e) {
 		Etat etatFils = e;
-		// teste si les fils ont bien été créés dans e, sinon les crée si e n'est pas un
+		// teste si les fils ont bien ï¿½tï¿½ crï¿½ï¿½s dans e, sinon les crï¿½e si e n'est pas un
 		// etat final
 		if (e.getNbFils() != 0 && !etatFils.estFinal() && filsNonDeveloppes(e).size() > 0)
 			etatFils = choixFilsAlea(e);
@@ -171,8 +219,8 @@ public class MCTS {
 	}
 
 	/**
-	 * met à jour les valeurs N(i) et mu(i) contenues dans un état e avec la
-	 * récompense r
+	 * met ï¿½ jour les valeurs N(i) et mu(i) contenues dans un ï¿½tat e avec la
+	 * rï¿½compense r
 	 * 
 	 * @param e
 	 * @param r
@@ -199,6 +247,14 @@ public class MCTS {
 
 	public float estimation() {
 		return estimationProbaVictoire;
+	}
+	
+	public int critere(){
+		return crit;
+	}
+	
+	public void setCrit(int c){
+		crit=c;
 	}
 
 	public void test() {

@@ -6,6 +6,9 @@ public class Modele extends Observable {
 
 	private int hauteur = 6;
 	private int largeur = 7;
+	private int critere;
+	public final static int CRITMAX = 1;
+	public final static int CRITROBUSTE = 0;
 	private MCTS mcts;
 	private Etat etatActu;
 	private int joueurActu;
@@ -17,6 +20,7 @@ public class Modele extends Observable {
 	public Modele() {
 		etatActu = new Etat(largeur, hauteur, JOUEUR);
 		joueurActu = JOUEUR;
+		critere=CRITROBUSTE;
 	}
 
 	public void jouerJeton(int x) {
@@ -40,6 +44,7 @@ public class Modele extends Observable {
 
 	public void jouerMCTS() {
 		mcts = new MCTS(etatActu, largeur, hauteur, tpsMCTS);
+		mcts.setCrit(critere);
 		etatActu = mcts.jouer();
 		miseAJour();
 	}
@@ -67,6 +72,14 @@ public class Modele extends Observable {
 
 	public void setLargeur(int largeur) {
 		this.largeur = largeur;
+	}
+
+	public int getCritere() {
+		return critere;
+	}
+	
+	public void setCritere(int c) {
+		critere=c;
 	}
 
 	public int getJoueurActu() {
