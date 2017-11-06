@@ -48,19 +48,14 @@ public class MCTS {
 
 	public Etat meilleureMoyDsFils(Etat e) {
 		Iterator<Etat> it = e.getFils();
-		Etat etatActu = null;
-		float moyEtatActu;
 		Etat etatPlusGrandeMoy = null;
-		float plusGrandeMoy = 0;
 		while (it.hasNext()) {
-			etatActu = it.next();
-			moyEtatActu = etatActu.getMu();
-			if (moyEtatActu >= plusGrandeMoy) {
-				//condition qui retourne directement un �tat si celui ci est final
-				if(etatActu.estFinal())
-					return etatActu;
+			Etat etatActu = it.next();
+			//condition qui retourne directement un �tat si celui ci est final
+			if(etatActu.estFinal())
+				return etatActu;
+			if (etatPlusGrandeMoy == null || etatActu.getMu() >= etatPlusGrandeMoy.getMu()) {
 				etatPlusGrandeMoy = etatActu;
-				plusGrandeMoy = moyEtatActu;
 			}
 		}
 		return etatPlusGrandeMoy;

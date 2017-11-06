@@ -127,7 +127,7 @@ public class Etat {
 	 * @param y
 	 * @return
 	 */
-	private boolean existeAlign(int x, int y) {
+	public boolean existeAlign(int x, int y) {
 		int k = 0, player=joueur;
 		int horiz = 0, verti = 0, diag1 = 0, diag2 = 0;
 		boolean nord = true, sud = true, est = true, ouest = true, nordest = true, nordouest = true, sudest = true,
