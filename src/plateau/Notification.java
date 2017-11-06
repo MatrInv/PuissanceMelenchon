@@ -56,14 +56,16 @@ public class Notification extends JPanel implements Observer {
 			estimation.setText("Estimation Victoire : " + m.estimation() * 100 + "%");
 			simulation.setText("Simulations : " + m.nbSimulations());
 		} else {
-			message.setText("La machine joue");
+			message.setText("Tour de la machine, cliquez pour la faire jouer");
 			resetDonnees();
 		}
 		if (m.estFini()) {
-			if (m.getJoueurActu() == m.MACHINE)
-				message.setText("La machine a gagné !");
-			if (m.getJoueurActu() == m.JOUEUR)
-				message.setText("Vous avez gagné !");
+			if (m.getGagnant() == m.MACHINE)
+				message.setText("La machine a gagne !");
+			if (m.getGagnant() == m.JOUEUR)
+				message.setText("Vous avez gagne !");
+			else
+				message.setText("Egalite !");
 			resetDonnees();
 
 		}

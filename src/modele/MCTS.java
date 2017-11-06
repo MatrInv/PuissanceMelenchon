@@ -46,19 +46,14 @@ public class MCTS {
 
 	public Etat meilleureMoyDsFils(Etat e) {
 		Iterator<Etat> it = e.getFils();
-		Etat etatActu = null;
-		float moyEtatActu;
 		Etat etatPlusGrandeMoy = null;
-		float plusGrandeMoy = 0;
 		while (it.hasNext()) {
-			etatActu = it.next();
-			moyEtatActu = etatActu.getMu();
-			if (moyEtatActu >= plusGrandeMoy) {
-				//condition qui retourne directement un état si celui ci est final
-				if(etatActu.estFinal())
-					return etatActu;
+			Etat etatActu = it.next();
+			//condition qui retourne directement un ï¿½tat si celui ci est final
+			if(etatActu.estFinal())
+				return etatActu;
+			if (etatPlusGrandeMoy == null || etatActu.getMu() >= etatPlusGrandeMoy.getMu()) {
 				etatPlusGrandeMoy = etatActu;
-				plusGrandeMoy = moyEtatActu;
 			}
 		}
 		return etatPlusGrandeMoy;
@@ -105,7 +100,7 @@ public class MCTS {
 	}
 
 	/**
-	 * choisit un fils aléatoire parmi les fils développés d'un état e
+	 * choisit un fils alï¿½atoire parmi les fils dï¿½veloppï¿½s d'un ï¿½tat e
 	 * 
 	 * @param e
 	 * @return
@@ -149,7 +144,7 @@ public class MCTS {
 	}
 
 	/**
-	 * joue une partie jusqu'à un état final en partant de l'état e
+	 * joue une partie jusqu'ï¿½ un ï¿½tat final en partant de l'ï¿½tat e
 	 * 
 	 * @param e
 	 * @return
@@ -157,7 +152,7 @@ public class MCTS {
 
 	private int marcheAleatoire(Etat e) {
 		Etat etatFils = e;
-		// teste si les fils ont bien été créés dans e, sinon les crée si e n'est pas un
+		// teste si les fils ont bien ï¿½tï¿½ crï¿½ï¿½s dans e, sinon les crï¿½e si e n'est pas un
 		// etat final
 		if (e.getNbFils() != 0 && !etatFils.estFinal() && filsNonDeveloppes(e).size() > 0)
 			etatFils = choixFilsAlea(e);
@@ -171,8 +166,8 @@ public class MCTS {
 	}
 
 	/**
-	 * met à jour les valeurs N(i) et mu(i) contenues dans un état e avec la
-	 * récompense r
+	 * met ï¿½ jour les valeurs N(i) et mu(i) contenues dans un ï¿½tat e avec la
+	 * rï¿½compense r
 	 * 
 	 * @param e
 	 * @param r
