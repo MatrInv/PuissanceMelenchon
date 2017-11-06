@@ -17,47 +17,31 @@ public class Modele extends Observable {
 	public final static int EGALITE = 0;
 	private int tpsMCTS = 1000;
 	private boolean fini = false;
-	private int gagnant;
 
 	public Modele() {
 		etatActu = new Etat(largeur, hauteur, JOUEUR);
 		joueurActu = JOUEUR;
-		critere=CRITROBUSTE;
-		gagnant = 2;
+		critere = CRITROBUSTE;
 	}
 
 	public void jouerJeton(int x) {
-		if (!etatActu.estFinal()) {
-			if (joueurActu == JOUEUR) {
-				if (etatActu.colJouable(x)) {
-					etatActu.jouerCol(x, etatActu.getJoueur());
-					finDePartie(x);
-					joueurActu *= -1;
-				}
-			} else {
-				mcts = new MCTS(etatActu, largeur, hauteur, tpsMCTS);
-				etatActu = mcts.jouer();
-				finDePartie(x);
+
+		if (joueurActu == JOUEUR) {
+			if (etatActu.colJouable(x)) {
+				etatActu.jouerCol(x, etatActu.getJoueur());
 				joueurActu *= -1;
-				etatActu.changerJoueur();
 			}
+		} else {
+			mcts = new MCTS(etatActu, largeur, hauteur, tpsMCTS);
+			etatActu = mcts.jouer();
+			joueurActu *= -1;
+			etatActu.changerJoueur();
 		}
+
 		miseAJour();
 
 		if (etatActu.estFinal())
 			fini = true;
-
-	}
-
-	public void finDePartie(int dernierJetonPose) {
-		if (etatActu.estFinal()) {
-			boolean align = etatActu.existeAlign(joueurActu, dernierJetonPose);
-			System.out.println(joueurActu);
-			if (!align)
-				gagnant = EGALITE;
-			else
-				gagnant = joueurActu;
-		}
 	}
 
 	public void jouerMCTS() {
@@ -95,9 +79,9 @@ public class Modele extends Observable {
 	public int getCritere() {
 		return critere;
 	}
-	
+
 	public void setCritere(int c) {
-		critere=c;
+		critere = c;
 	}
 
 	public int getJoueurActu() {
@@ -120,10 +104,6 @@ public class Modele extends Observable {
 
 	public float estimation() {
 		return mcts.estimation();
-	}
-
-	public int getGagnant() {
-		return gagnant;
 	}
 
 }
