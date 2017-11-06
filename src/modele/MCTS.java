@@ -89,6 +89,8 @@ public class MCTS {
 		while (it.hasNext()) {
 			etatActu = it.next();
 			NEtatActu = etatActu.getN();
+			if(etatActu.estFinal())
+				return etatActu;
 			if (NEtatActu >= plusGrandN) {
 				etatPlusGrandN = etatActu;
 				plusGrandN = NEtatActu;

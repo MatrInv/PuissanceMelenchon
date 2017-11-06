@@ -118,7 +118,7 @@ public class Etat {
 	}
 
 	/**
-
+	 * 
 	 * renvoie true si il y a un alignement de 4 jetons � partir du jeton de
 	 * position x,y appartennant � player
 	 * 
@@ -128,7 +128,7 @@ public class Etat {
 	 * @return
 	 */
 	public boolean existeAlign(int x, int y) {
-		int k = 0, player=joueur;
+		int k = 0, player = joueur;
 		int horiz = 0, verti = 0, diag1 = 0, diag2 = 0;
 		boolean nord = true, sud = true, est = true, ouest = true, nordest = true, nordouest = true, sudest = true,
 				sudouest = true; // ces var sont là pour indiquer si on est tombé sur un jeton non-player en
@@ -230,7 +230,7 @@ public class Etat {
 			estFinal = true;
 		}
 	}
-	
+
 	public void changerJoueur() {
 		joueur *= -1;
 	}
@@ -283,7 +283,6 @@ public class Etat {
 		return (float) (joueur * mu + Math.sqrt(MCTS.C * Math.log((double) pere.getN()) / getN()));
 	}
 
-	
 	public String tabToString() {
 		StringBuilder sb = new StringBuilder();
 		for (int y = 0; y < getNbLig(); y++) {

@@ -90,12 +90,10 @@ public class Notification extends JPanel implements Observer {
 			resetDonnees();
 		}
 		if (m.estFini()) {
-			if (m.getGagnant() == m.MACHINE)
+			if (m.getJoueurActu() == m.MACHINE)
 				message.setText("La machine a gagne !");
-			if (m.getGagnant() == m.JOUEUR)
+			if (m.getJoueurActu() == m.JOUEUR)
 				message.setText("Vous avez gagne !");
-			else
-				message.setText("Egalite !");
 			resetDonnees();
 
 		}
