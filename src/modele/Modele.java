@@ -99,6 +99,10 @@ public class Modele extends Observable {
 	public void setCritere(int c) {
 		critere=c;
 	}
+	
+	public void changerCritere(){
+		critere=(critere+1)%2;
+	}
 
 	public int getJoueurActu() {
 		return joueurActu;
